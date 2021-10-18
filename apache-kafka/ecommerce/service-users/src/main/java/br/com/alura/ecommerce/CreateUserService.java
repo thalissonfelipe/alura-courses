@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 public class CreateUserService {
@@ -37,13 +38,13 @@ public class CreateUserService {
 
         var order = record.value();
         if(isNewUser(order.getEmail())) {
-            insertNewUser(order.getUserId(), order.getEmail());
+            insertNewUser(order.getEmail());
         }
     }
 
-    private void insertNewUser(String id, String email) throws SQLException {
+    private void insertNewUser(String email) throws SQLException {
         var statement = connection.prepareStatement("insert into user (id, email) values (?,?)");
-        statement.setString(1, id);
+        statement.setString(1, UUID.randomUUID().toString());
         statement.setString(2, email);
         statement.execute();
         System.out.println("User added.");
